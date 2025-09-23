@@ -1,0 +1,118 @@
+/* Checkout.css */
+
+/* Container */
+.checkout-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 32px;
+  font-family: Arial, sans-serif;
+}
+
+/* Headings */
+.checkout-container h1 {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 24px;
+}
+
+.checkout-container h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+/* Inputs & Textarea */
+.checkout-container input,
+.checkout-container textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  font-size: 1rem;
+}
+
+.checkout-container textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+/* Order Summary */
+.order-summary {
+  margin-bottom: 32px;
+}
+
+.order-summary-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 8px;
+}
+
+.order-summary-total {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  font-size: 18px;
+  margin-top: 12px;
+}
+
+/* Payment Method */
+.payment-method {
+  margin-bottom: 32px;
+  display: flex;
+  gap: 16px;
+}
+
+/* Buttons */
+.checkout-btn,
+.consult-btn {
+  padding: 12px 24px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.2s;
+}
+
+.checkout-btn {
+  background-color: #16a34a;
+  color: #fff;
+}
+
+.checkout-btn:hover {
+  transform: scale(1.05);
+}
+
+.consult-btn {
+  background-color: #3b82f6;
+  color: #fff;
+  margin-left: 16px;
+}
+
+.consult-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .checkout-container {
+    padding: 16px;
+  }
+
+  .payment-method {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .consult-btn {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .checkout-btn {
+    width: 100%;
+    margin-bottom: 12px;
+  }
+}

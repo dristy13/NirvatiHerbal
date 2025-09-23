@@ -12,102 +12,19 @@ import CartPage from "./components/CartPage";
 import Checkout from "./components/Checkout";
 import CheckoutPage from "./components/CheckoutPage";
 import UserAccount from "./components/UserAccount";
+import Footer from "./components/Footer";
 
-// ---------------- Footer Component ----------------
-const Footer = () => {
-  const linkStyle = {
-    color: "#fff",
-    textDecoration: "none",
-    cursor: "pointer",
-    transition: "color 0.3s",
-  };
+import "./NirvatiHerbal.css";
 
-  return (
-    <footer
-      style={{
-        backgroundColor: "#16A34A",
-        color: "#fff",
-        padding: "25px 20px",
-        marginTop: "auto",
-        fontSize: 14,
-        lineHeight: 1.5,
-      }}
-    >
-      <div
-        style={{
-          maxWidth: 1200,
-          margin: "0 auto",
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-          gap: 20,
-        }}
-      >
-        <div>
-          <h3 style={{ marginBottom: 12 }}>About Nirvati</h3>
-          <p>
-            Nirvati Herbal provides natural and organic herbal products for a
-            healthier lifestyle. Pure, safe, and effective.
-          </p>
-        </div>
-
-        <div>
-          <h3 style={{ marginBottom: 12 }}>Quick Links</h3>
-          <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-            {["Home", "Products", "Cart", "Checkout", "Account"].map(
-              (item, idx) => (
-                <li
-                  key={idx}
-                  style={{ marginBottom: 6 }}
-                  onMouseEnter={(e) => (e.target.style.color = "#16a34a")}
-                  onMouseLeave={(e) => (e.target.style.color = "#fff")}
-                >
-                  <span style={linkStyle}>{item}</span>
-                </li>
-              )
-            )}
-          </ul>
-        </div>
-
-        <div>
-          <h3 style={{ marginBottom: 12 }}>Contact Us</h3>
-          <p>Email: support@nirvati.com</p>
-          <p>Phone: +91 9876543210</p>
-          <p>Address: 123 Herbal St, Wellness City</p>
-        </div>
-
-        <div>
-          <h3 style={{ marginBottom: 12 }}>Follow Us</h3>
-          <p style={{ margin: 0 }}>Facebook | Instagram | Twitter | LinkedIn</p>
-        </div>
-      </div>
-
-      <div
-        style={{
-          textAlign: "center",
-          marginTop: 15,
-          fontSize: 12,
-          opacity: 0.6,
-        }}
-      >
-        © 2025 Nirvati Herbal. All Rights Reserved.
-      </div>
-    </footer>
-  );
-};
-
-// ---------------- Main App ----------------
 const NirvatiHerbal = () => {
-  // ---------- Global UI State ----------
   const [activeSection, setActiveSection] = useState("home");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
 
-  // ---------- Global App Data ----------
   const [cartItems, setCartItems] = useState([]);
   const [wishlist, setWishlist] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
-  // ---------- Sample Products ----------
   const sampleProducts = [
     {
       id: 1,
@@ -155,16 +72,14 @@ const NirvatiHerbal = () => {
     },
   ];
 
-  // ---------- Cart Helpers ----------
   const addToCart = (product, qty = 1) => {
     if (!product?.id) return;
     setCartItems((prev) => {
       const existing = prev.find((p) => p.id === product.id);
-      if (existing) {
+      if (existing)
         return prev.map((p) =>
           p.id === product.id ? { ...p, quantity: p.quantity + qty } : p
         );
-      }
       return [...prev, { ...product, quantity: qty }];
     });
     setActiveSection("cart");
@@ -180,11 +95,9 @@ const NirvatiHerbal = () => {
     );
   };
 
-  const removeFromCart = (productId) => {
+  const removeFromCart = (productId) =>
     setCartItems((prev) => prev.filter((item) => item.id !== productId));
-  };
 
-  // ---------- Wishlist ----------
   const toggleWishlist = (product) => {
     if (!product?.id) return;
     const exists = wishlist.find((w) =>
@@ -201,23 +114,14 @@ const NirvatiHerbal = () => {
     }
   };
 
-  // ---------- Navigation Helper ----------
   const navigateTo = (section, opts = {}) => {
     if (opts.product) setSelectedProduct(opts.product);
     setActiveSection(section);
     window.scrollTo(0, 0);
   };
 
-  // ---------- Render ----------
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        minHeight: "100vh",
-        backgroundColor: "#fff",
-      }}
-    >
+    <div className="nirvati-app">
       <Header
         activeSection={activeSection}
         setActiveSection={navigateTo}
@@ -229,45 +133,39 @@ const NirvatiHerbal = () => {
 
       {activeSection === "home" && (
         <HomeSection
-          setActiveSection={(s, opts) => navigateTo(s, opts)}
+          setActiveSection={navigateTo}
           setIsChatOpen={setIsChatOpen}
           products={sampleProducts}
         />
       )}
-
       {activeSection === "test" && (
         <TestSection
-          setActiveSection={(s, opts) => navigateTo(s, opts)}
+          setActiveSection={navigateTo}
           setIsChatOpen={setIsChatOpen}
         />
       )}
-
       {activeSection === "products" && (
         <Products
           products={sampleProducts}
-          setActiveSection={(s, opts) => navigateTo(s, opts)}
-          cartItems={cartItems}
-          setCartItems={setCartItems}
+          setActiveSection={navigateTo}
           addToCart={addToCart}
           wishlist={wishlist}
           setWishlist={setWishlist}
-          setSelectedProduct={setSelectedProduct}
+          cartItems={cartItems}
+          setCartItems={setCartItems}
         />
       )}
-
       {activeSection === "productlist" && (
         <ProductList
           products={sampleProducts}
-          setActiveSection={(s, opts) => navigateTo(s, opts)}
+          setActiveSection={navigateTo}
           addToCart={addToCart}
           wishlist={wishlist}
           setWishlist={setWishlist}
-          setSelectedProduct={setSelectedProduct}
           cartItems={cartItems}
           setCartItems={setCartItems}
         />
       )}
-
       {activeSection === "productdetail" && (
         <ProductDetail
           product={selectedProduct}
@@ -275,149 +173,87 @@ const NirvatiHerbal = () => {
           setCartItems={setCartItems}
           wishlist={wishlist}
           setWishlist={setWishlist}
-          setActiveSection={(s) => navigateTo(s)}
+          setActiveSection={navigateTo}
           setIsChatOpen={setIsChatOpen}
         />
       )}
-
       {activeSection === "cart" && (
         <Cart
           cartItems={cartItems}
           setCartItems={setCartItems}
-          setActiveSection={(s) => navigateTo(s)}
-          setIsChatOpen={setIsChatOpen}
           removeItem={removeFromCart}
           updateQuantity={setCartItemQuantity}
+          setActiveSection={navigateTo}
+          setIsChatOpen={setIsChatOpen}
         />
       )}
-
       {activeSection === "cartpage" && (
         <CartPage
           cartItems={cartItems}
           setCartItems={setCartItems}
           removeFromCart={removeFromCart}
-          setActiveSection={(s) => navigateTo(s)}
+          setActiveSection={navigateTo}
         />
       )}
-
       {activeSection === "checkout" && (
         <Checkout
           cartItems={cartItems}
           setCartItems={setCartItems}
-          setActiveSection={(s) => navigateTo(s)}
+          setActiveSection={navigateTo}
         />
       )}
-
       {activeSection === "checkoutpage" && (
         <CheckoutPage
           cartItems={cartItems}
           setCartItems={setCartItems}
-          setActiveSection={(s) => navigateTo(s)}
+          setActiveSection={navigateTo}
         />
       )}
-
       {activeSection === "account" && (
         <UserAccount
           wishlist={wishlist}
           setWishlist={setWishlist}
-          setActiveSection={(s) => navigateTo(s)}
+          setActiveSection={navigateTo}
         />
       )}
 
-      {/* Fallback Chat Overlay */}
       {isChatOpen && (
-        <div
-          style={{
-            position: "fixed",
-            inset: 0,
-            backgroundColor: "rgba(0,0,0,0.4)",
-            zIndex: 9999,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: 16,
-          }}
-          onClick={() => setIsChatOpen(false)}
-        >
-          <div
-            style={{
-              width: 380,
-              maxWidth: "100%",
-              height: 560,
-              background: "#fff",
-              borderRadius: 12,
-              boxShadow: "0 25px 50px rgba(0,0,0,0.2)",
-              display: "flex",
-              flexDirection: "column",
-              overflow: "hidden",
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div
-              style={{
-                padding: 16,
-                background: "linear-gradient(135deg,#16a34a,#059669)",
-                color: "#fff",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
+        <div className="chat-overlay" onClick={() => setIsChatOpen(false)}>
+          <div className="chat-box" onClick={(e) => e.stopPropagation()}>
+            <div className="chat-header">
               <div>
-                <div style={{ fontWeight: 700 }}>Ayurvedic Expert</div>
-                <div style={{ fontSize: 12, opacity: 0.9 }}>Online now</div>
+                <div className="chat-title">Ayurvedic Expert</div>
+                <div className="chat-status">Online now</div>
               </div>
-              <button
-                onClick={() => setIsChatOpen(false)}
-                style={{
-                  background: "transparent",
-                  border: "none",
-                  color: "#fff",
-                  fontSize: 18,
-                  cursor: "pointer",
-                }}
-              >
-                ✕
-              </button>
+              <button onClick={() => setIsChatOpen(false)}>✕</button>
             </div>
-
-            <div style={{ flex: 1, padding: 12, overflowY: "auto" }}>
-              <div style={{ marginBottom: 12, color: "#374151" }}>
+            <div className="chat-body">
+              <div className="chat-message">
                 Hello! How can we help you today?
               </div>
             </div>
-
-            <div style={{ padding: 12, borderTop: "1px solid #e5e7eb" }}>
-              <div style={{ display: "flex", gap: 8 }}>
-                <input
-                  placeholder="Type your message..."
-                  style={{
-                    flex: 1,
-                    padding: 10,
-                    borderRadius: 8,
-                    border: "1px solid #e5e7eb",
-                  }}
-                />
-                <button
-                  style={{
-                    background: "#16a34a",
-                    color: "#fff",
-                    border: "none",
-                    borderRadius: 8,
-                    padding: "10px 12px",
-                    cursor: "pointer",
-                  }}
-                >
-                  Send
-                </button>
-              </div>
+            <div className="chat-footer">
+              <input placeholder="Type your message..." />
+              <button>Send</button>
             </div>
           </div>
         </div>
       )}
 
-      {/* ---------------- Footer ---------------- */}
-      <Footer />
+      {/* Sticky Footer only for Cart/Checkout and when Chat is not open */}
+      {(activeSection === "cart" ||
+        activeSection === "cartpage" ||
+        activeSection === "checkout" ||
+        activeSection === "checkoutpage") &&
+        !isChatOpen && <Footer className="sticky-footer" />}
+
+      {/* Regular Footer for other pages */}
+      {!(
+        activeSection === "cart" ||
+        activeSection === "cartpage" ||
+        activeSection === "checkout" ||
+        activeSection === "checkoutpage"
+      ) && <Footer />}
     </div>
   );
 };

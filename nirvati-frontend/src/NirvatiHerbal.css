@@ -1,29 +1,25 @@
-/* body {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
-} */
-/* App.css */
-
-/* --- Global Styles --- */
-body,
-html,
-#root {
-  margin: 0;
-  padding: 0;
-  font-family: "Arial", sans-serif;
-  background-color: #fff;
-  min-height: 100vh;
-}
-
-/* --- Layout Helpers --- */
-.app-container {
+/* --- App Layout --- */
+.nirvati-app {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: 100vh; /* full height of viewport */
+  background-color: #fff;
 }
 
-/* --- Chat Overlay --- */
+.main-content {
+  flex: 1; /* allows main content to grow and push footer down */
+  padding: 16px;
+}
+
+/* --- Footer --- */
+footer {
+  background-color: #16a34a;
+  color: #fff;
+  padding: 12px 16px;
+  text-align: center;
+}
+
+/* --- Chat overlay --- */
 .chat-overlay {
   position: fixed;
   inset: 0;
@@ -56,11 +52,11 @@ html,
   align-items: center;
 }
 
-.chat-header .title {
+.chat-title {
   font-weight: 700;
 }
 
-.chat-header .status {
+.chat-status {
   font-size: 12px;
   opacity: 0.9;
 }
@@ -73,28 +69,28 @@ html,
   cursor: pointer;
 }
 
-.chat-messages {
+.chat-body {
   flex: 1;
   padding: 12px;
   overflow-y: auto;
   color: #374151;
 }
 
-.chat-input {
+.chat-footer {
   padding: 12px;
   border-top: 1px solid #e5e7eb;
   display: flex;
   gap: 8px;
 }
 
-.chat-input input {
+.chat-footer input {
   flex: 1;
   padding: 10px;
   border-radius: 8px;
   border: 1px solid #e5e7eb;
 }
 
-.chat-input button {
+.chat-footer button {
   background: #16a34a;
   color: #fff;
   border: none;

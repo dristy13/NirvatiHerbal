@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "../CSS/Products.css";
 
 const Products = ({ products, setActiveSection, cartItems, setCartItems }) => {
   const [search, setSearch] = useState("");
@@ -42,42 +43,22 @@ const Products = ({ products, setActiveSection, cartItems, setCartItems }) => {
   };
 
   return (
-    <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "32px" }}>
-      <h1
-        style={{ fontSize: "28px", fontWeight: "bold", marginBottom: "24px" }}
-      >
-        Products
-      </h1>
+    <div className="products-container">
+      <h1 className="products-title">Products</h1>
 
       {/* Filters */}
-      <div
-        style={{
-          display: "flex",
-          gap: "16px",
-          marginBottom: "24px",
-          flexWrap: "wrap",
-        }}
-      >
+      <div className="products-filters">
         <input
           type="text"
           placeholder="Search products"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          style={{
-            padding: "8px",
-            borderRadius: "6px",
-            border: "1px solid #e5e7eb",
-            flex: "1 1 200px",
-          }}
+          className="filter-input"
         />
         <select
           value={filterCategory}
           onChange={(e) => setFilterCategory(e.target.value)}
-          style={{
-            padding: "8px",
-            borderRadius: "6px",
-            border: "1px solid #e5e7eb",
-          }}
+          className="filter-select"
         >
           {categories.map((cat) => (
             <option key={cat} value={cat}>
@@ -88,11 +69,7 @@ const Products = ({ products, setActiveSection, cartItems, setCartItems }) => {
         <select
           value={filterBrand}
           onChange={(e) => setFilterBrand(e.target.value)}
-          style={{
-            padding: "8px",
-            borderRadius: "6px",
-            border: "1px solid #e5e7eb",
-          }}
+          className="filter-select"
         >
           {brands.map((b) => (
             <option key={b} value={b}>
@@ -103,11 +80,7 @@ const Products = ({ products, setActiveSection, cartItems, setCartItems }) => {
         <select
           value={filterRating}
           onChange={(e) => setFilterRating(e.target.value)}
-          style={{
-            padding: "8px",
-            borderRadius: "6px",
-            border: "1px solid #e5e7eb",
-          }}
+          className="filter-select"
         >
           <option value="All">All Ratings</option>
           {[5, 4, 3, 2, 1].map((r) => (
@@ -119,81 +92,23 @@ const Products = ({ products, setActiveSection, cartItems, setCartItems }) => {
       </div>
 
       {/* Product Grid */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-          gap: "24px",
-        }}
-      >
+      <div className="products-grid">
         {filteredProducts.map((p) => (
-          <div
-            key={p.id}
-            style={{
-              border: "1px solid #e5e7eb",
-              borderRadius: "8px",
-              padding: "16px",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-            }}
-          >
-            <img
-              src={p.image}
-              alt={p.name}
-              style={{
-                width: "100%",
-                borderRadius: "8px",
-                marginBottom: "12px",
-              }}
-            />
-            <h2
-              style={{
-                fontSize: "16px",
-                fontWeight: "600",
-                marginBottom: "8px",
-              }}
-            >
-              {p.name}
-            </h2>
-            <p
-              style={{
-                fontSize: "14px",
-                color: "#6b7280",
-                marginBottom: "8px",
-              }}
-            >
-              {p.brand}
-            </p>
-            <p style={{ fontWeight: "600", marginBottom: "8px" }}>
-              ₹{p.price.toLocaleString("en-IN")}
-            </p>
-            <p style={{ fontSize: "14px", marginBottom: "8px" }}>
-              Rating: {p.rating}⭐
-            </p>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <button
-                onClick={() => addToCart(p)}
-                style={{
-                  padding: "8px",
-                  borderRadius: "6px",
-                  backgroundColor: "#16a34a",
-                  color: "#fff",
-                  border: "none",
-                  cursor: "pointer",
-                }}
-              >
+          <div key={p.id} className="product-card">
+            <img src={p.image} alt={p.name} className="product-image" />
+            <h2 className="product-name">{p.name}</h2>
+            <p className="product-brand">{p.brand}</p>
+            <p className="product-price">₹{p.price.toLocaleString("en-IN")}</p>
+            <p className="product-rating">Rating: {p.rating}⭐</p>
+            <div className="product-buttons">
+              <button onClick={() => addToCart(p)} className="add-cart-btn">
                 Add to Cart
               </button>
               <button
                 onClick={() => toggleWishlist(p.id)}
-                style={{
-                  padding: "8px",
-                  borderRadius: "6px",
-                  border: "1px solid #e5e7eb",
-                  backgroundColor: wishlist.includes(p.id) ? "#fbbf24" : "#fff",
-                  cursor: "pointer",
-                }}
+                className={`wishlist-btn ${
+                  wishlist.includes(p.id) ? "wishlist-active" : ""
+                }`}
               >
                 {wishlist.includes(p.id) ? "★" : "☆"}
               </button>

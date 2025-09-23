@@ -1,5 +1,5 @@
-// src/components/UserAccount.jsx
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
+import "../CSS/UserAccount.css";
 
 const UserAccount = ({
   setActiveSection,
@@ -43,9 +43,8 @@ const UserAccount = ({
   const [loginInput, setLoginInput] = useState({ email: "", phone: "" });
   const [newAddress, setNewAddress] = useState({ label: "Home", address: "" });
   const [problemText, setProblemText] = useState("");
-  const [sidebarOpen, setSidebarOpen] = useState(false); // mobile sidebar toggle
 
-  // Persist localStorage
+  // Persist to localStorage
   useEffect(
     () => localStorage.setItem("nirvati_user", JSON.stringify(user)),
     [user]
@@ -86,14 +85,18 @@ const UserAccount = ({
     setActiveTab("profile");
     alert("Logged in (demo). Data stored locally.");
   };
+
   const handleLogout = () => setUser(null);
+
   const handleAddAddress = () => {
     if (!newAddress.address.trim()) return alert("Enter address.");
     setAddresses((s) => [{ id: Date.now(), ...newAddress }, ...s]);
     setNewAddress({ label: "Home", address: "" });
   };
+
   const handleRemoveAddress = (id) =>
     setAddresses((s) => s.filter((a) => a.id !== id));
+
   const handleUploadUserDoc = (file, orderId = null) => {
     if (!file) return;
     const doc = {
@@ -114,6 +117,7 @@ const UserAccount = ({
       );
     alert("Document added locally (preview available).");
   };
+
   const handleRemoveUserDoc = (id) => {
     setUserDocs((s) => s.filter((d) => d.id !== id));
     setOrders((prev) =>
@@ -123,6 +127,7 @@ const UserAccount = ({
       }))
     );
   };
+
   const handleCompanyDocUpload = (file) => {
     if (!file) return;
     const doc = {
@@ -134,6 +139,7 @@ const UserAccount = ({
     setCompanyDocs((s) => [doc, ...s]);
     alert("Company document saved locally.");
   };
+
   const handleReportProblem = (orderId) => {
     if (!problemText.trim()) return alert("Write your problem first.");
     setOrders((prev) =>
@@ -156,10 +162,12 @@ const UserAccount = ({
     setProblemText("");
     alert("Problem noted locally.");
   };
+
   const handleRemoveFromWishlist = (id) => {
     if (setWishlist)
       setWishlist((w) => w.filter((it) => (it.id ? it.id !== id : it !== id)));
   };
+
   const addToCartFromWishlist = (product) => {
     if (!product) return;
     const p = {
@@ -184,66 +192,31 @@ const UserAccount = ({
   };
 
   const DownloadLink = ({ url, name }) => (
-    <a
-      href={url}
-      download={name}
-      style={{ color: "#0b74ff", textDecoration: "none" }}
-    >
-      Download
+    <a href={url} download={name} className="download-link">
+      {name}
     </a>
   );
 
   return (
-    <div style={{ padding: 20, maxWidth: 1100, margin: "0 auto" }}>
-      <h1 style={{ marginBottom: 8 }}>My Account</h1>
-      <p style={{ color: "#6b7280", marginTop: 0 }}>
+    <div className="user-account-container">
+      <h1>My Account</h1>
+      <p className="subtext">
         NIRVATI HERBAL PRIVATE LIMITED - Customer Dashboard (demo)
       </p>
 
-      {/* Mobile Sidebar Toggle */}
-      <button
-        onClick={() => setSidebarOpen(!sidebarOpen)}
-        style={{ display: "none", marginBottom: 12 }}
-        className="mobile-sidebar-btn"
-      >
-        {sidebarOpen ? "Close Menu" : "Menu"}
-      </button>
-
-      <div
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: 24,
-          marginTop: 20,
-        }}
-      >
+      <div className="account-layout">
         {/* Sidebar */}
-        <div
-          style={{
-            flex: "1 1 220px",
-            minWidth: 220,
-            borderRight: "1px solid #e5e7eb",
-            paddingRight: 16,
-            display: sidebarOpen ? "block" : "block",
-          }}
-          className="sidebar"
-        >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: 12,
-            }}
-          >
+        <div className="sidebar">
+          <div className="sidebar-header">
             <strong>{user ? user.name : "Guest"}</strong>
             {user && (
-              <button onClick={handleLogout} style={btnSmall}>
+              <button className="btn-small" onClick={handleLogout}>
                 Sign out
               </button>
             )}
           </div>
-          <nav style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+
+          <nav className="sidebar-nav">
             {[
               "profile",
               "orders",
@@ -254,7 +227,7 @@ const UserAccount = ({
             ].map((tab) => (
               <button
                 key={tab}
-                style={tabButton(activeTab === tab)}
+                className={`tab-button ${activeTab === tab ? "active" : ""}`}
                 onClick={() => setActiveTab(tab)}
               >
                 {tab.charAt(0).toUpperCase() +
@@ -262,37 +235,30 @@ const UserAccount = ({
               </button>
             ))}
           </nav>
-          <div style={{ marginTop: 20 }}>
-            <button
-              style={ctaButton}
-              onClick={() => setActiveSection("products")}
-            >
-              Continue Shopping
-            </button>
-          </div>
+
+          <button
+            className="cta-button continue-shopping"
+            onClick={() => setActiveSection("products")}
+          >
+            Continue Shopping
+          </button>
         </div>
 
         {/* Main Content */}
-        <div style={{ flex: "3 1 600px", minWidth: 300 }}>
+        <div className="main-content">
           {/* Profile Tab */}
           {activeTab === "profile" && (
             <section>
-              <h2 style={sectionTitle}>Profile</h2>
+              <h2 className="section-title">Profile</h2>
               {!user ? (
-                <form
-                  onSubmit={handleLogin}
-                  style={{ display: "flex", flexDirection: "column", gap: 12 }}
-                >
-                  <p style={{ color: "#6b7280" }}>
-                    Quick demo login (client-side only)
-                  </p>
+                <form className="login-form" onSubmit={handleLogin}>
+                  <p className="subtext">Quick demo login (client-side only)</p>
                   <input
                     placeholder="Email"
                     value={loginInput.email}
                     onChange={(e) =>
                       setLoginInput({ ...loginInput, email: e.target.value })
                     }
-                    style={inputStyle}
                   />
                   <input
                     placeholder="Mobile (optional)"
@@ -300,15 +266,14 @@ const UserAccount = ({
                     onChange={(e) =>
                       setLoginInput({ ...loginInput, phone: e.target.value })
                     }
-                    style={inputStyle}
                   />
-                  <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                    <button type="submit" style={ctaButton}>
+                  <div className="login-btns">
+                    <button type="submit" className="cta-button">
                       Login
                     </button>
                     <button
                       type="button"
-                      style={secondaryBtn}
+                      className="secondary-btn"
                       onClick={() =>
                         setLoginInput({ email: "guest@example.com", phone: "" })
                       }
@@ -318,13 +283,7 @@ const UserAccount = ({
                   </div>
                 </form>
               ) : (
-                <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "1fr 1fr",
-                    gap: 16,
-                  }}
-                >
+                <div className="profile-grid">
                   <div>
                     <p>
                       <strong>Name:</strong> {user.name}
@@ -356,106 +315,67 @@ const UserAccount = ({
           {/* Orders Tab */}
           {activeTab === "orders" && (
             <section>
-              <h2 style={sectionTitle}>Your Orders</h2>
+              <h2 className="section-title">Your Orders</h2>
               {orders.length === 0 ? (
                 <p>No orders yet.</p>
               ) : (
                 orders.map((o) => (
-                  <div key={o.id} style={cardStyle}>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                      }}
-                    >
+                  <div key={o.id} className="card">
+                    <div className="order-header">
                       <div>
                         <strong>{o.id}</strong> ·{" "}
-                        <span style={{ color: "#6b7280" }}>{o.date}</span>
-                        <div style={{ marginTop: 6 }}>
+                        <span className="subtext">{o.date}</span>
+                        <div>
                           Status: <strong>{o.status}</strong>
                         </div>
                       </div>
-                      <div style={{ textAlign: "right" }}>
-                        <div style={{ fontWeight: 700 }}>₹{o.total}</div>
-                        <div style={{ fontSize: 12, color: "#6b7280" }}>
-                          {o.courier?.name}{" "}
+                      <div className="order-total">
+                        ₹{o.total}
+                        <div className="subtext">
+                          {o.courier?.name}
                           {o.courier?.trackingId
-                            ? `· ${o.courier.trackingId}`
+                            ? ` · ${o.courier.trackingId}`
                             : ""}
                         </div>
                       </div>
                     </div>
-
-                    <div style={{ marginTop: 8 }}>
+                    <div className="order-items">
                       {o.items.map((it) => (
-                        <div
-                          key={it.id}
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            padding: "2px 0",
-                          }}
-                        >
-                          <span>
-                            {it.name} x{it.qty}
-                          </span>
-                          <span>₹{it.price * it.qty}</span>
+                        <div key={it.id} className="order-item">
+                          {it.name} x{it.qty} <span>₹{it.price * it.qty}</span>
                         </div>
                       ))}
                     </div>
-
-                    <div
-                      style={{
-                        marginTop: 8,
-                        display: "flex",
-                        gap: 8,
-                        flexWrap: "wrap",
-                      }}
-                    >
+                    <div className="order-actions">
                       <input
                         type="file"
                         onChange={(e) =>
                           handleUploadUserDoc(e.target.files[0], o.id)
                         }
-                        style={{ flex: 1 }}
                       />
                       <input
                         placeholder="Report Problem"
                         value={problemText}
                         onChange={(e) => setProblemText(e.target.value)}
-                        style={{
-                          flex: 2,
-                          borderRadius: 6,
-                          border: "1px solid #d1d5db",
-                          padding: 4,
-                        }}
                       />
                       <button
-                        style={ctaButtonSmall}
+                        className="cta-button-small"
                         onClick={() => handleReportProblem(o.id)}
                       >
                         Submit
                       </button>
                     </div>
-
                     {(o.problems || []).map((p) => (
-                      <div
-                        key={p.id}
-                        style={{ fontSize: 12, color: "#ef4444", marginTop: 4 }}
-                      >
+                      <div key={p.id} className="problem-text">
                         Problem: {p.text}{" "}
-                        <span style={{ color: "#6b7280" }}>
-                          ({new Date(p.at).toLocaleString()})
-                        </span>
+                        <span>({new Date(p.at).toLocaleString()})</span>
                       </div>
                     ))}
-
                     {(o.docs || []).map((d) => (
-                      <div key={d.id} style={{ fontSize: 12, marginTop: 4 }}>
-                        {d.name} · <DownloadLink url={d.url} name={d.name} /> ·{" "}
+                      <div key={d.id} className="doc-text">
+                        {d.name} · <DownloadLink url={d.url} name={d.name} /> ·
                         <button
-                          style={tinyDanger}
+                          className="tiny-danger"
                           onClick={() => handleRemoveUserDoc(d.id)}
                         >
                           Remove
@@ -471,29 +391,23 @@ const UserAccount = ({
           {/* Wishlist Tab */}
           {activeTab === "wishlist" && (
             <section>
-              <h2 style={sectionTitle}>Wishlist</h2>
+              <h2 className="section-title">Wishlist</h2>
               {wishlist.length === 0 ? (
                 <p>Your wishlist is empty.</p>
               ) : (
                 wishlist.map((p, i) => (
-                  <div key={i} style={cardStyle}>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                      }}
-                    >
-                      <div style={{ fontWeight: 500 }}>{p.title || p.name}</div>
-                      <div style={{ display: "flex", gap: 8 }}>
+                  <div key={i} className="card">
+                    <div className="wishlist-item">
+                      <div>{p.title || p.name}</div>
+                      <div className="wishlist-actions">
                         <button
-                          style={ctaButtonSmall}
+                          className="cta-button-small"
                           onClick={() => addToCartFromWishlist(p)}
                         >
                           Add to Cart
                         </button>
                         <button
-                          style={tinyDanger}
+                          className="tiny-danger"
                           onClick={() => handleRemoveFromWishlist(p.id)}
                         >
                           Remove
@@ -509,22 +423,14 @@ const UserAccount = ({
           {/* Addresses Tab */}
           {activeTab === "addresses" && (
             <section>
-              <h2 style={sectionTitle}>Addresses</h2>
-              <div
-                style={{
-                  display: "flex",
-                  gap: 8,
-                  marginBottom: 16,
-                  flexWrap: "wrap",
-                }}
-              >
+              <h2 className="section-title">Addresses</h2>
+              <div className="add-address">
                 <input
                   placeholder="Label"
                   value={newAddress.label}
                   onChange={(e) =>
                     setNewAddress({ ...newAddress, label: e.target.value })
                   }
-                  style={{ ...inputStyle, flex: 1 }}
                 />
                 <input
                   placeholder="Address"
@@ -532,9 +438,8 @@ const UserAccount = ({
                   onChange={(e) =>
                     setNewAddress({ ...newAddress, address: e.target.value })
                   }
-                  style={{ ...inputStyle, flex: 3 }}
                 />
-                <button style={ctaButtonSmall} onClick={handleAddAddress}>
+                <button className="cta-button-small" onClick={handleAddAddress}>
                   Add
                 </button>
               </div>
@@ -542,19 +447,11 @@ const UserAccount = ({
                 <p>No addresses added yet.</p>
               ) : (
                 addresses.map((a) => (
-                  <div key={a.id} style={cardStyle}>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                      }}
-                    >
-                      <span>
-                        <strong>{a.label}</strong>: {a.address}
-                      </span>
+                  <div key={a.id} className="card address-item">
+                    <div>
+                      {a.label}: {a.address}{" "}
                       <button
-                        style={tinyDanger}
+                        className="tiny-danger"
                         onClick={() => handleRemoveAddress(a.id)}
                       >
                         Remove
@@ -566,70 +463,46 @@ const UserAccount = ({
             </section>
           )}
 
-          {/* User Docs Tab */}
+          {/* User Documents Tab */}
           {activeTab === "documents" && (
             <section>
-              <h2 style={sectionTitle}>Your Documents</h2>
+              <h2 className="section-title">Your Documents</h2>
               <input
                 type="file"
                 onChange={(e) => handleUploadUserDoc(e.target.files[0])}
-                style={{ marginBottom: 12 }}
               />
               {userDocs.length === 0 ? (
                 <p>No documents uploaded yet.</p>
               ) : (
                 userDocs.map((d) => (
-                  <div key={d.id} style={cardStyle}>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        fontSize: 14,
-                      }}
+                  <div key={d.id} className="card">
+                    {d.name} · <DownloadLink url={d.url} name={d.name} />
+                    <button
+                      className="tiny-danger"
+                      onClick={() => handleRemoveUserDoc(d.id)}
                     >
-                      <span>
-                        {d.name} · <DownloadLink url={d.url} name={d.name} />
-                      </span>
-                      <button
-                        style={tinyDanger}
-                        onClick={() => handleRemoveUserDoc(d.id)}
-                      >
-                        Remove
-                      </button>
-                    </div>
+                      Remove
+                    </button>
                   </div>
                 ))
               )}
             </section>
           )}
 
-          {/* Company Docs Tab */}
+          {/* Company Documents Tab */}
           {activeTab === "companydocs" && (
             <section>
-              <h2 style={sectionTitle}>Company Documents</h2>
+              <h2 className="section-title">Company Documents</h2>
               <input
                 type="file"
                 onChange={(e) => handleCompanyDocUpload(e.target.files[0])}
-                style={{ marginBottom: 12 }}
               />
               {companyDocs.length === 0 ? (
                 <p>No company documents uploaded yet.</p>
               ) : (
                 companyDocs.map((d) => (
-                  <div key={d.id} style={cardStyle}>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        fontSize: 14,
-                      }}
-                    >
-                      <span>
-                        {d.name} · <DownloadLink url={d.url} name={d.name} />
-                      </span>
-                    </div>
+                  <div key={d.id} className="card">
+                    {d.name} · <DownloadLink url={d.url} name={d.name} />
                   </div>
                 ))
               )}
@@ -640,82 +513,5 @@ const UserAccount = ({
     </div>
   );
 };
-
-// --- Styles ---
-const inputStyle = {
-  padding: 8,
-  borderRadius: 6,
-  border: "1px solid #d1d5db",
-  width: "100%",
-  outline: "none",
-};
-const ctaButton = {
-  padding: "8px 16px",
-  borderRadius: 8,
-  border: "none",
-  cursor: "pointer",
-  backgroundColor: "#16a34a",
-  color: "#fff",
-  fontWeight: 500,
-};
-const ctaButtonSmall = {
-  padding: "4px 12px",
-  borderRadius: 6,
-  border: "none",
-  cursor: "pointer",
-  backgroundColor: "#16a34a",
-  color: "#fff",
-  fontSize: 13,
-  fontWeight: 500,
-};
-const secondaryBtn = {
-  padding: "8px 16px",
-  borderRadius: 6,
-  border: "1px solid #d1d5db",
-  cursor: "pointer",
-  backgroundColor: "#f9fafb",
-  color: "#111",
-};
-const tinyDanger = {
-  padding: "2px 8px",
-  borderRadius: 4,
-  border: "none",
-  cursor: "pointer",
-  backgroundColor: "#ef4444",
-  color: "#fff",
-  fontSize: 12,
-};
-const btnSmall = {
-  padding: "4px 8px",
-  borderRadius: 6,
-  border: "1px solid #d1d5db",
-  cursor: "pointer",
-  backgroundColor: "#f3f4f6",
-  fontSize: 12,
-};
-const cardStyle = {
-  border: "1px solid #e5e7eb",
-  borderRadius: 8,
-  padding: 12,
-  marginBottom: 12,
-  backgroundColor: "#fff",
-  boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
-};
-const sectionTitle = {
-  fontSize: 20,
-  fontWeight: 600,
-  marginBottom: 12,
-  borderBottom: "1px solid #e5e7eb",
-  paddingBottom: 6,
-};
-const tabButton = (active) => ({
-  padding: "8px 12px",
-  borderRadius: 6,
-  border: "none",
-  backgroundColor: active ? "#16a34a" : "#f3f4f6",
-  color: active ? "#fff" : "#111",
-  cursor: "pointer",
-  textAlign: "left",
-});
 
 export default UserAccount;

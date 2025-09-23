@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "../CSS/ProductList.css";
 
 const ProductList = ({ setActiveSection, setIsChatOpen }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -130,8 +131,8 @@ const ProductList = ({ setActiveSection, setIsChatOpen }) => {
             padding: "10px 14px",
             borderRadius: "8px",
             border: "1px solid #e5e7eb",
-            flex: "1 1 200px",
-            minWidth: "200px",
+            flex: "1 1 100%",
+            minWidth: "150px",
           }}
         />
 
@@ -144,6 +145,7 @@ const ProductList = ({ setActiveSection, setIsChatOpen }) => {
               padding: "10px",
               borderRadius: "8px",
               border: "1px solid #e5e7eb",
+              flex: "1 1 120px",
             }}
           >
             {f === "category" && (
@@ -186,9 +188,14 @@ const ProductList = ({ setActiveSection, setIsChatOpen }) => {
         }}
       >
         {filteredProducts.length === 0 && (
-          <p style={{ textAlign: "center", gridColumn: "1/-1" }}>
-            No products found.
-          </p>
+          <div style={{ textAlign: "center", gridColumn: "1/-1" }}>
+            <img
+              src="https://via.placeholder.com/150?text=No+Products"
+              alt="no products"
+              style={{ marginBottom: "12px" }}
+            />
+            <p>No products found.</p>
+          </div>
         )}
 
         {filteredProducts.map((product) => (
@@ -199,21 +206,28 @@ const ProductList = ({ setActiveSection, setIsChatOpen }) => {
               borderRadius: "12px",
               overflow: "hidden",
               boxShadow: "0 6px 18px rgba(0,0,0,0.05)",
-              transition: "transform 0.2s",
+              transition: "transform 0.2s, box-shadow 0.2s",
               cursor: "pointer",
             }}
-            onMouseEnter={(e) =>
-              (e.currentTarget.style.transform = "translateY(-5px)")
-            }
-            onMouseLeave={(e) =>
-              (e.currentTarget.style.transform = "translateY(0)")
-            }
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-5px)";
+              e.currentTarget.style.boxShadow = "0 8px 20px rgba(0,0,0,0.1)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "0 6px 18px rgba(0,0,0,0.05)";
+            }}
           >
             <div style={{ position: "relative" }}>
               <img
                 src={product.image}
                 alt={product.name}
-                style={{ width: "100%", height: "180px", objectFit: "cover" }}
+                style={{
+                  width: "100%",
+                  height: "180px",
+                  objectFit: "cover",
+                  transition: "transform 0.3s",
+                }}
               />
               <button
                 onClick={() => handleWishlist(product.id)}
@@ -232,6 +246,12 @@ const ProductList = ({ setActiveSection, setIsChatOpen }) => {
                   cursor: "pointer",
                   transition: "all 0.2s",
                 }}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.transform = "scale(1.2)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.transform = "scale(1)")
+                }
               >
                 ❤️
               </button>
@@ -255,7 +275,7 @@ const ProductList = ({ setActiveSection, setIsChatOpen }) => {
                   marginBottom: "4px",
                 }}
               >
-                Price: ₹{product.price}
+                Price: ₹{product.price.toLocaleString("en-IN")}
               </p>
               <p style={{ color: "#f59e0b", marginBottom: "12px" }}>
                 {"⭐".repeat(product.rating)}
@@ -269,14 +289,17 @@ const ProductList = ({ setActiveSection, setIsChatOpen }) => {
                   borderRadius: "8px",
                   cursor: "pointer",
                   fontSize: "0.95rem",
-                  transition: "transform 0.2s",
+                  transition: "transform 0.2s, box-shadow 0.2s",
                 }}
-                onMouseEnter={(e) =>
-                  (e.currentTarget.style.transform = "scale(1.05)")
-                }
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.transform = "scale(1)")
-                }
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "scale(1.05)";
+                  e.currentTarget.style.boxShadow =
+                    "0 4px 12px rgba(0,0,0,0.2)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "scale(1)";
+                  e.currentTarget.style.boxShadow = "none";
+                }}
               >
                 Explore Products →
               </button>
