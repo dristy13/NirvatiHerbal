@@ -1,10 +1,6 @@
 // src/components/UserAccount.jsx
 import React, { useEffect, useState } from "react";
 
-/**
- * UserAccount.jsx - Modernized UI + functional demo with localStorage
- */
-
 const UserAccount = ({
   setActiveSection,
   wishlist = [],
@@ -28,49 +24,28 @@ const UserAccount = ({
     },
   ];
 
-  // --- State ---
-  const [user, setUser] = useState(() => {
-    try {
-      return JSON.parse(localStorage.getItem("nirvati_user")) || null;
-    } catch {
-      return null;
-    }
-  });
-  const [orders, setOrders] = useState(() => {
-    try {
-      return JSON.parse(localStorage.getItem("nirvati_orders")) || sampleOrders;
-    } catch {
-      return sampleOrders;
-    }
-  });
-  const [userDocs, setUserDocs] = useState(() => {
-    try {
-      return JSON.parse(localStorage.getItem("nirvati_user_docs")) || [];
-    } catch {
-      return [];
-    }
-  });
-  const [companyDocs, setCompanyDocs] = useState(() => {
-    try {
-      return JSON.parse(localStorage.getItem("nirvati_company_docs")) || [];
-    } catch {
-      return [];
-    }
-  });
-  const [addresses, setAddresses] = useState(() => {
-    try {
-      return JSON.parse(localStorage.getItem("nirvati_addresses")) || [];
-    } catch {
-      return [];
-    }
-  });
-
+  const [user, setUser] = useState(
+    JSON.parse(localStorage.getItem("nirvati_user")) || null
+  );
+  const [orders, setOrders] = useState(
+    JSON.parse(localStorage.getItem("nirvati_orders")) || sampleOrders
+  );
+  const [userDocs, setUserDocs] = useState(
+    JSON.parse(localStorage.getItem("nirvati_user_docs")) || []
+  );
+  const [companyDocs, setCompanyDocs] = useState(
+    JSON.parse(localStorage.getItem("nirvati_company_docs")) || []
+  );
+  const [addresses, setAddresses] = useState(
+    JSON.parse(localStorage.getItem("nirvati_addresses")) || []
+  );
   const [activeTab, setActiveTab] = useState("profile");
   const [loginInput, setLoginInput] = useState({ email: "", phone: "" });
   const [newAddress, setNewAddress] = useState({ label: "Home", address: "" });
   const [problemText, setProblemText] = useState("");
+  const [sidebarOpen, setSidebarOpen] = useState(false); // mobile sidebar toggle
 
-  // --- Persist to localStorage ---
+  // Persist localStorage
   useEffect(
     () => localStorage.setItem("nirvati_user", JSON.stringify(user)),
     [user]
@@ -111,10 +86,7 @@ const UserAccount = ({
     setActiveTab("profile");
     alert("Logged in (demo). Data stored locally.");
   };
-  const handleLogout = () => {
-    setUser(null);
-    setActiveTab("profile");
-  };
+  const handleLogout = () => setUser(null);
   const handleAddAddress = () => {
     if (!newAddress.address.trim()) return alert("Enter address.");
     setAddresses((s) => [{ id: Date.now(), ...newAddress }, ...s]);
@@ -221,7 +193,6 @@ const UserAccount = ({
     </a>
   );
 
-  // --- UI ---
   return (
     <div style={{ padding: 20, maxWidth: 1100, margin: "0 auto" }}>
       <h1 style={{ marginBottom: 8 }}>My Account</h1>
@@ -229,21 +200,33 @@ const UserAccount = ({
         NIRVATI HERBAL PRIVATE LIMITED - Customer Dashboard (demo)
       </p>
 
+      {/* Mobile Sidebar Toggle */}
+      <button
+        onClick={() => setSidebarOpen(!sidebarOpen)}
+        style={{ display: "none", marginBottom: 12 }}
+        className="mobile-sidebar-btn"
+      >
+        {sidebarOpen ? "Close Menu" : "Menu"}
+      </button>
+
       <div
         style={{
           display: "flex",
+          flexWrap: "wrap",
           gap: 24,
           marginTop: 20,
-          alignItems: "flex-start",
         }}
       >
-        {/* Sidebar Tabs */}
+        {/* Sidebar */}
         <div
           style={{
-            width: 220,
+            flex: "1 1 220px",
+            minWidth: 220,
             borderRight: "1px solid #e5e7eb",
             paddingRight: 16,
+            display: sidebarOpen ? "block" : "block",
           }}
+          className="sidebar"
         >
           <div
             style={{
@@ -289,21 +272,16 @@ const UserAccount = ({
           </div>
         </div>
 
-        {/* Content */}
-        <div style={{ flex: 1 }}>
-          {/* --- Profile Tab --- */}
+        {/* Main Content */}
+        <div style={{ flex: "3 1 600px", minWidth: 300 }}>
+          {/* Profile Tab */}
           {activeTab === "profile" && (
             <section>
               <h2 style={sectionTitle}>Profile</h2>
               {!user ? (
                 <form
                   onSubmit={handleLogin}
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 12,
-                    maxWidth: 520,
-                  }}
+                  style={{ display: "flex", flexDirection: "column", gap: 12 }}
                 >
                   <p style={{ color: "#6b7280" }}>
                     Quick demo login (client-side only)
@@ -324,7 +302,7 @@ const UserAccount = ({
                     }
                     style={inputStyle}
                   />
-                  <div style={{ display: "flex", gap: 8 }}>
+                  <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                     <button type="submit" style={ctaButton}>
                       Login
                     </button>
@@ -345,7 +323,6 @@ const UserAccount = ({
                     display: "grid",
                     gridTemplateColumns: "1fr 1fr",
                     gap: 16,
-                    maxWidth: 720,
                   }}
                 >
                   <div>
@@ -376,7 +353,7 @@ const UserAccount = ({
             </section>
           )}
 
-          {/* --- Orders Tab --- */}
+          {/* Orders Tab */}
           {activeTab === "orders" && (
             <section>
               <h2 style={sectionTitle}>Your Orders</h2>
@@ -428,7 +405,14 @@ const UserAccount = ({
                       ))}
                     </div>
 
-                    <div style={{ marginTop: 8, display: "flex", gap: 8 }}>
+                    <div
+                      style={{
+                        marginTop: 8,
+                        display: "flex",
+                        gap: 8,
+                        flexWrap: "wrap",
+                      }}
+                    >
                       <input
                         type="file"
                         onChange={(e) =>
@@ -455,41 +439,36 @@ const UserAccount = ({
                       </button>
                     </div>
 
-                    <div style={{ marginTop: 6 }}>
-                      {(o.problems || []).map((p) => (
-                        <div
-                          key={p.id}
-                          style={{ fontSize: 12, color: "#ef4444" }}
-                        >
-                          Problem: {p.text}{" "}
-                          <span style={{ color: "#6b7280" }}>
-                            ({new Date(p.at).toLocaleString()})
-                          </span>
-                        </div>
-                      ))}
-                    </div>
+                    {(o.problems || []).map((p) => (
+                      <div
+                        key={p.id}
+                        style={{ fontSize: 12, color: "#ef4444", marginTop: 4 }}
+                      >
+                        Problem: {p.text}{" "}
+                        <span style={{ color: "#6b7280" }}>
+                          ({new Date(p.at).toLocaleString()})
+                        </span>
+                      </div>
+                    ))}
 
-                    <div style={{ marginTop: 6 }}>
-                      {(o.docs || []).map((d) => (
-                        <div key={d.id} style={{ fontSize: 12 }}>
-                          {d.name} · <DownloadLink url={d.url} name={d.name} />{" "}
-                          ·{" "}
-                          <button
-                            style={tinyDanger}
-                            onClick={() => handleRemoveUserDoc(d.id)}
-                          >
-                            Remove
-                          </button>
-                        </div>
-                      ))}
-                    </div>
+                    {(o.docs || []).map((d) => (
+                      <div key={d.id} style={{ fontSize: 12, marginTop: 4 }}>
+                        {d.name} · <DownloadLink url={d.url} name={d.name} /> ·{" "}
+                        <button
+                          style={tinyDanger}
+                          onClick={() => handleRemoveUserDoc(d.id)}
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
                   </div>
                 ))
               )}
             </section>
           )}
 
-          {/* --- Wishlist Tab --- */}
+          {/* Wishlist Tab */}
           {activeTab === "wishlist" && (
             <section>
               <h2 style={sectionTitle}>Wishlist</h2>
@@ -527,11 +506,18 @@ const UserAccount = ({
             </section>
           )}
 
-          {/* --- Addresses Tab --- */}
+          {/* Addresses Tab */}
           {activeTab === "addresses" && (
             <section>
               <h2 style={sectionTitle}>Addresses</h2>
-              <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
+              <div
+                style={{
+                  display: "flex",
+                  gap: 8,
+                  marginBottom: 16,
+                  flexWrap: "wrap",
+                }}
+              >
                 <input
                   placeholder="Label"
                   value={newAddress.label}
@@ -580,7 +566,7 @@ const UserAccount = ({
             </section>
           )}
 
-          {/* --- User Documents Tab --- */}
+          {/* User Docs Tab */}
           {activeTab === "documents" && (
             <section>
               <h2 style={sectionTitle}>Your Documents</h2>
@@ -618,7 +604,7 @@ const UserAccount = ({
             </section>
           )}
 
-          {/* --- Company Documents Tab --- */}
+          {/* Company Docs Tab */}
           {activeTab === "companydocs" && (
             <section>
               <h2 style={sectionTitle}>Company Documents</h2>
@@ -655,7 +641,7 @@ const UserAccount = ({
   );
 };
 
-// --- Shared Styles ---
+// --- Styles ---
 const inputStyle = {
   padding: 8,
   borderRadius: 6,
@@ -668,7 +654,7 @@ const ctaButton = {
   borderRadius: 8,
   border: "none",
   cursor: "pointer",
-  backgroundColor: "#0b74ff",
+  backgroundColor: "#16a34a",
   color: "#fff",
   fontWeight: 500,
 };
@@ -677,7 +663,7 @@ const ctaButtonSmall = {
   borderRadius: 6,
   border: "none",
   cursor: "pointer",
-  backgroundColor: "#0b74ff",
+  backgroundColor: "#16a34a",
   color: "#fff",
   fontSize: 13,
   fontWeight: 500,
@@ -726,7 +712,7 @@ const tabButton = (active) => ({
   padding: "8px 12px",
   borderRadius: 6,
   border: "none",
-  backgroundColor: active ? "#0b74ff" : "#f3f4f6",
+  backgroundColor: active ? "#16a34a" : "#f3f4f6",
   color: active ? "#fff" : "#111",
   cursor: "pointer",
   textAlign: "left",
